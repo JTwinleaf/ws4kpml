@@ -1,19 +1,15 @@
 ![Weatherstar 4000+ Current Conditions](https://github.com/netbymatt/ws4kp/blob/main/server/images/social/1200x600.png)
 
-# WeatherStar 4000+
+# WeatherStar 4000+ - Now with Multi-Location!
 
-A live version of this project is available at https://weatherstar.netbymatt.com
+Based on the original codebase by NetByMatt
 
 ## About
 
-This project aims to bring back the feel of the 90s with a weather forecast that has the look and feel of The Weather Channel at that time but available in a modern way. This is by no means intended to be a perfect emulation of the WeatherStar 4000, the hardware that produced those wonderful blue and orange graphics you saw during the local forecast on The Weather Channel. If you would like a much more accurate project please see the [WS4000 Simulator](http://www.taiganet.com/). Instead, this project intends to create a simple to use interface with minimal configuration fuss. Some changes have been made to the screens available because either more or less forecast information is available today than was in the 90s. Most of these changes are captured in sections below.
+I am starting this fork to build skills and portfolio while I try and land jobs in the tech sector. I have used the original for my current job for years as I genuinely love the vibe, so adding to it feels right. The scope of this project at first is just to add the ability to do the forecast for multiple regions or cities. I am sure there are others who have done this already, this is more to prove to myself I can do it. Who knows, maybe I'll put more stuff I'd like in here?
 
-## What's your motivation
 
-Nostalgia. And I enjoy following the weather, especially severe storms.
-
-It's also a creative outlet for me and keeps my programming skills honed for when I need them for my day job.
-
+# === Below this was written by NetByMatt ===
 ### Included technology
 I've kept this open source, well commented, and made it as library-free as possible to help others interested in programming be able to jump right in and start working with the code.
 
