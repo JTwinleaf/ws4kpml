@@ -9,7 +9,7 @@ Based on the original codebase by NetByMatt
 I am starting this fork to build skills and portfolio while I try and land jobs in the tech sector. I have used the original for my current job for years as I genuinely love the vibe, so adding to it feels right. The scope of this project at first is just to add the ability to do the forecast for multiple regions or cities. I am sure there are others who have done this already, this is more to prove to myself I can do it. Who knows, maybe I'll put more stuff I'd like in here?
 
 
-# === Below this was written by NetByMatt ===
+# === Below this was written by [NetByMatt](https://github.com/netbymatt/ws4kp) ===
 ### Included technology
 I've kept this open source, well commented, and made it as library-free as possible to help others interested in programming be able to jump right in and start working with the code.
 
