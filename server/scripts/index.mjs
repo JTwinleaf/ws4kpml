@@ -10,6 +10,10 @@ import AutoComplete from './modules/autocomplete.mjs';
 import { loadAllData } from './modules/utils/data-loader.mjs';
 import { debugFlag } from './modules/utils/debug.mjs';
 import { parseQueryString } from './modules/utils/setting.mjs';
+import {
+	addLocation, initUI as initLocationUI, clearLocations, onLocationChange,
+	getLocations, setLocationsFromQuery,
+} from './modules/locationmanager.mjs';
 
 document.addEventListener('DOMContentLoaded', () => {
 	init();
@@ -105,6 +109,32 @@ const init = async () => {
 	});
 	window.autoComplete = autoComplete;
 
+	// initialize multi-location manager
+	initLocationUI(document.querySelector('#locationList'));
+
+	// set up location change callback - update UI when navigation cycles to a new location
+	// note: weather data fetching is handled by navigation.mjs directly
+	onLocationChange((loc) => {
+		const txtAddress = document.querySelector(TXT_ADDRESS_SELECTOR);
+		txtAddress.value = loc.name;
+		localStorage.setItem('latLonQuery', loc.name);
+		localStorage.setItem('latLon', JSON.stringify(loc.latLon));
+	});
+
+	// "Add Current Location" button
+	document.querySelector('#btnAddLocation').addEventListener('click', () => {
+		const query = document.querySelector(TXT_ADDRESS_SELECTOR).value;
+		const latLonStr = localStorage.getItem('latLon');
+		if (!query || !latLonStr) return;
+		const latLon = JSON.parse(latLonStr);
+		addLocation(query, latLon);
+	});
+
+	// "Clear All" button
+	document.querySelector('#btnClearLocations').addEventListener('click', () => {
+		clearLocations();
+	});
+
 	// attempt to parse the url parameters
 	const parsedParameters = parseQueryString();
 	const loadFromParsed = !!parsedParameters.latLon;
@@ -173,6 +203,9 @@ const init = async () => {
 		localStorage.removeItem('latLon');
 		localStorage.removeItem('latLonFromGPS');
 		document.querySelector(BNT_GET_GPS_SELECTOR).classList.remove('active');
+
+		// also clear multi-locations
+		clearLocations();
 	});
 
 	// swipe functionality
@@ -182,6 +215,22 @@ const init = async () => {
 	// register hidden settings for search and location query
 	registerHiddenSetting('latLonQuery', () => localStorage.getItem('latLonQuery'));
 	registerHiddenSetting('latLon', () => localStorage.getItem('latLon'));
+	registerHiddenSetting('multiLocations', () => {
+		const locs = getLocations();
+		return locs.length > 0 ? JSON.stringify(locs) : '';
+	});
+
+	// load multi-locations from query string if present
+	if (parsedParameters.multiLocations) {
+		try {
+			const locs = JSON.parse(decodeURIComponent(parsedParameters.multiLocations));
+			if (Array.isArray(locs) && locs.length > 0) {
+				setLocationsFromQuery(locs);
+			}
+		} catch (e) {
+			console.warn('Failed to parse multiLocations from query string:', e);
+		}
+	}
 };
 
 const geocodeLatLonQuery = async (query) => {
