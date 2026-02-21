@@ -6,6 +6,7 @@ import { safeJson } from './utils/fetch.mjs';
 import { getPoint } from './utils/weather.mjs';
 import { debugFlag } from './utils/debug.mjs';
 import settings from './settings.mjs';
+import { isMultiLocationActive, triggerLocationChange } from './locationmanager.mjs';
 
 document.addEventListener('DOMContentLoaded', () => {
 	init();
@@ -269,6 +270,24 @@ const loadDisplay = (direction) => {
 	if (!foundSuitableDisplay) {
 		console.warn('No suitable display found for navigation');
 		return;
+	}
+
+	// multi-location cycling: when going forward and wrapping back to a display before (or equal to)
+	// the current one, we've completed a full cycle through all displays - switch to next location
+	if (direction > 0 && isMultiLocationActive() && idx <= curIdx && isPlaying()) {
+		const nextLoc = triggerLocationChange();
+		if (nextLoc) {
+			// reset all display statuses and hide canvases
+			resetStatuses();
+			hideAllCanvases();
+			// show progress screen while loading new location
+			if (progress) {
+				progress.showCanvas();
+			}
+			// trigger weather data fetch for the new location
+			getWeather(nextLoc.latLon);
+			return;
+		}
 	}
 
 	const newDisplay = displays[idx];
